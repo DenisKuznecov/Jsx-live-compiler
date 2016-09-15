@@ -54,7 +54,24 @@ class Slider extends React.Component {
 	}
 }
 
+class SecondApp extends React.Component {
+	render() {
+		return <Button>React</Button>
+	}
+}
+class Button extends React.Component {
+	render() {
+		return <button>{this.props.children}</button>
+	}
+}
+
+
 ReactDOM.render(
 	<App cat={5} />,
 	document.getElementById('app')
 )
+ReactDOM.render(
+	<SecondApp />,
+	document.getElementById('second-app')
+)
+
