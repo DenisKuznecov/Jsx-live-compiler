@@ -16,7 +16,7 @@ class App extends React.Component {
 			green: ReactDOM.findDOMNode(this.refs.green).value,
 			blue: ReactDOM.findDOMNode(this.refs.blue).value
 		})
-	}	
+	}
 	render(){
 		return (
 			<div>
