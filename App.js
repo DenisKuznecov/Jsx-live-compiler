@@ -71,35 +71,46 @@ class ThirdApp extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			val: 0
+			increasing: false
 		};
 		this.update = this.update.bind(this);
 	}
 	update(){
-		this.setState({
-			val: this.state.val + 1
-		})
+		ReactDOM.render(
+			<ThirdApp val={this.props.val+1} />,
+			document.getElementById('third-app')
+		);
 	}
-	componentWillMount(){
-		this.setState({
-			m: 2
-		})
+	componentWillReceiveProps(nextProps){
+		this.setState({increasing: nextProps.val > this.props.val})
+	}
+	shouldComponentUpdate(nextProps, nextState){
+		return nextProps.val % 5 === 0;
 	}
 	render() {
-		console.log('rendering!');
+		console.log(this.state.increasing);
 		return (
 			<button onClick={this.update}>
-				{this.state.val * this.state.m}
+				{this.props.val}
 			</button>
 		);
 	}
-	componentDidMount(){
-		this.inc = setInterval(this.update, 500)
+	componentDidUpdate(prevProps, prevState){
+		console.log('prevProps', prevProps);
 	}
-	componentWillUnmount(){
-		clearInterval(this.inc)
-	}
+	// componentWillMount(){
+	// 	this.setState({
+	// 		m: 2
+	// 	})
+	// }
+	// componentDidMount(){
+	// 	this.inc = setInterval(this.update, 500)
+	// }
+	// componentWillUnmount(){
+	// 	clearInterval(this.inc)
+	// }
 }
+ThirdApp.defaultProps = {val: 0}
 
 class Wrapper extends React.Component {
 	constructor(){
