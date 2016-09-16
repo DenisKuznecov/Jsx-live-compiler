@@ -35,7 +35,7 @@ class App extends React.Component {
 }
 
 App.propTypes = {
-	txt: React.PropTypes.string,
+	txt: React.PropTypes.string, 
 	cat: React.PropTypes.number.isRequired
 }
 
@@ -56,7 +56,7 @@ class Slider extends React.Component {
 
 class SecondApp extends React.Component {
 	render() {
-		return <Button>React</Button>
+		return <Button> <Heart /> React</Button>
 	}
 }
 class Button extends React.Component {
@@ -65,6 +65,62 @@ class Button extends React.Component {
 	}
 }
 
+const Heart = () => <span className="glyphicon glyphicon-heart"></span>
+
+class ThirdApp extends React.Component {
+	constructor() {
+		super();
+		this.state = {
+			val: 0
+		};
+		this.update = this.update.bind(this);
+	}
+	update(){
+		this.setState({
+			val: this.state.val + 1
+		})
+	}
+	componentWillMount(){
+		console.log('mounting');
+	}
+	render() {
+		console.log('rendering!');
+		return <button onClick={this.update}>{this.state.val}</button>
+	}
+	componentDidMount(){
+		console.log('mounted!');
+	}
+	componentWillUnMount(){
+		console.log('bye!');
+	}
+}
+
+class Wrapper extends React.Component {
+	constructor(){
+		super();
+	}
+	mount(){
+		ReactDOM.render(<ThirdApp />, document.getElementById('a'))
+	}
+	unmount(){
+		ReactDOM.unmountComponentAtNode(document.getElementById('a'))
+	}
+	render() {
+		return (
+			<div>
+				<button onClick={this.mount.bind(this)}>Mount</button>
+				<button onClick={this.unmount.bind(this)}>Unmount</button>
+				<div id="a"></div>
+			</div>
+		);
+	}
+}
+
+
+ReactDOM.render(
+	<Wrapper />,
+	document.getElementById('third-app')
+)
 
 ReactDOM.render(
 	<App cat={5} />,
