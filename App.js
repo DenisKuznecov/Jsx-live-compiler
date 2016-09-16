@@ -81,17 +81,23 @@ class ThirdApp extends React.Component {
 		})
 	}
 	componentWillMount(){
-		console.log('mounting');
+		this.setState({
+			m: 2
+		})
 	}
 	render() {
 		console.log('rendering!');
-		return <button onClick={this.update}>{this.state.val}</button>
+		return (
+			<button onClick={this.update}>
+				{this.state.val * this.state.m}
+			</button>
+		);
 	}
 	componentDidMount(){
-		console.log('mounted!');
+		this.inc = setInterval(this.update, 500)
 	}
-	componentWillUnMount(){
-		console.log('bye!');
+	componentWillUnmount(){
+		clearInterval(this.inc)
 	}
 }
 
