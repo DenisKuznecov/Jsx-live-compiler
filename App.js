@@ -54,50 +54,70 @@ class Slider extends React.Component {
 	}
 }
 
-class SecondApp extends React.Component {
-	render() {
-		return <Button> <Heart /> React</Button>
-	}
-}
-class Button extends React.Component {
-	render() {
-		return <button>{this.props.children}</button>
-	}
-}
+// class SecondApp extends React.Component {
+// 	render() {
+// 		return <Button> <Heart /> React</Button>
+// 	}
+// }
+// class Button extends React.Component {
+// 	render() {
+// 		return <button>{this.props.children}</button>
+// 	}
+// }
 
-const Heart = () => <span className="glyphicon glyphicon-heart"></span>
+// const Heart = () => <span className="glyphicon glyphicon-heart"></span>
 
-class ThirdApp extends React.Component {
+let Mixin = InnerComponent => class extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			increasing: false
+			val: 0
 		};
 		this.update = this.update.bind(this);
 	}
 	update(){
-		ReactDOM.render(
-			<ThirdApp val={this.props.val+1} />,
-			document.getElementById('third-app')
-		);
+		this.setState({
+			val: this.state.val + 1
+		})
 	}
-	componentWillReceiveProps(nextProps){
-		this.setState({increasing: nextProps.val > this.props.val})
+	componentWillMount(){
+	 	console.log('will mount');
+	 }
+	 render(){
+	 	return(
+			<InnerComponent update={this.update}
+			{...this.state}
+			{...this.props} />
+	 	);
+	 }
+	componentDidMount(){
+	 	console.log('mounted')
 	}
-	shouldComponentUpdate(nextProps, nextState){
-		return nextProps.val % 5 === 0;
-	}
+}
+
+const Button = (props) => <button 
+														onClick={props.update}>
+														{props.txt} - {props.val}
+													</button>
+const Label = (props) => <label 
+														onMouseMove={props.update}>
+														{props.txt} - {props.val}
+													</label>
+
+let ButtonMixed = Mixin(Button)
+let LabelMixed = Mixin(Label)
+
+class ThirdApp extends React.Component {
+	
 	render() {
-		console.log(this.state.increasing);
 		return (
-			<button onClick={this.update}>
-				{this.props.val}
-			</button>
+			<div>
+				<ButtonMixed txt="button" />
+				<LabelMixed txt="label" />
+			</div>
 		);
 	}
-	componentDidUpdate(prevProps, prevState){
-		console.log('prevProps', prevProps);
-	}
+	
 	// componentWillMount(){
 	// 	this.setState({
 	// 		m: 2
@@ -109,33 +129,21 @@ class ThirdApp extends React.Component {
 	// componentWillUnmount(){
 	// 	clearInterval(this.inc)
 	// }
+	// componentWillReceiveProps(nextProps){
+	// 	this.setState({increasing: nextProps.val > this.props.val})
+	// }
+	// shouldComponentUpdate(nextProps, nextState){
+	// 	return nextProps.val % 5 === 0;
+	// }
+	// componentDidUpdate(prevProps, prevState){
+	// 	console.log('prevProps', prevProps);
+	// }
 }
-ThirdApp.defaultProps = {val: 0}
-
-class Wrapper extends React.Component {
-	constructor(){
-		super();
-	}
-	mount(){
-		ReactDOM.render(<ThirdApp />, document.getElementById('a'))
-	}
-	unmount(){
-		ReactDOM.unmountComponentAtNode(document.getElementById('a'))
-	}
-	render() {
-		return (
-			<div>
-				<button onClick={this.mount.bind(this)}>Mount</button>
-				<button onClick={this.unmount.bind(this)}>Unmount</button>
-				<div id="a"></div>
-			</div>
-		);
-	}
-}
+ThirdApp.defaultProps = {txt: 'button'}
 
 
 ReactDOM.render(
-	<Wrapper />,
+	<ThirdApp />,
 	document.getElementById('third-app')
 )
 
@@ -143,8 +151,8 @@ ReactDOM.render(
 	<App cat={5} />,
 	document.getElementById('app')
 )
-ReactDOM.render(
-	<SecondApp />,
-	document.getElementById('second-app')
-)
+// ReactDOM.render(
+// 	<SecondApp />,
+// 	document.getElementById('second-app')
+// )
 
